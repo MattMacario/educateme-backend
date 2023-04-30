@@ -1,0 +1,87 @@
+<html>
+<head>
+
+	<style>
+		.topnav {
+			overflow: hidden;
+			background-color: #333;
+		}
+		.topnav a {
+			float: left;
+			color: #f2f2f2;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+			font-size: 17px;
+		}
+
+		.topnav a:hover {
+			background-color: #ddd;
+			color: black;
+		}
+
+		.topnav a.active {
+			background-color: #04AA6D;
+			color: white;
+		}
+	</style>
+
+</head>
+<body style="background-color: #E3E3E3">
+
+
+<p><div class="topnav">
+	<a class="active" href="/">Home</a>
+	<a href="/login">Login</a>
+
+
+
+</div> </p>
+<br>
+<br>
+<p>Teacher Registration</p>
+<form id="teacher-form">
+      <label for="username">username:</label>
+      <input type="text" id="username" name="username"><br><br>
+      <label for="password">password:</label>
+      <input type="text" id="password" name="password"><br><br>
+	<label for="subject">subject:</label>
+      <input type="text" id="subject" name="subject"><br><br>
+      <label for="email">email:</label>
+      <input type="text" id="email" name="email"><br><br>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+      const form = document.querySelector('#teacher-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const url = 'https://tc7vs3yb2surb2h25hefxe7erq0bstyi.lambda-url.us-west-1.on.aws/post-teacher';
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        };
+        const response = await fetch(url, options);
+        const result = await response.json();
+        console.log(result);
+        window.location.href = '/afterRegister';
+        if (result.status === 'success') {
+        message.textContent = 'Teacher registered successfully!';
+        } else {
+        message.textContent = 'Username already exists';
+        }
+
+      });
+    </script>
+
+
+
+
+</body>
+</html>

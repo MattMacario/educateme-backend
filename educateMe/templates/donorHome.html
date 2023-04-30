@@ -1,0 +1,85 @@
+<html>
+<head>
+	<style>
+		.topnav {
+			overflow: hidden;
+			background-color: #333;
+		}
+		.topnav a {
+			float: left;
+			color: #f2f2f2;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+			font-size: 17px;
+		}
+
+		.topnav a:hover {
+			background-color: #ddd;
+			color: black;
+		}
+
+		.topnav a.active {
+			background-color: #04AA6D;
+			color: white;
+		}
+	</style>
+</head>
+<body style="background-color: #E3E3E3">
+<div class="topnav">
+	<a class="active" href="/donorHome">Home</a>
+	<a href="/afterLogout">Logout</a>
+
+</div>
+
+<br><br>
+<p>Post Donation</p>
+<form id="donation-form">
+<!--      <label for="id">id:</label>-->
+<!--      <input type="text" id="id" name="id"><br><br>-->
+      <label for="title">title:</label>
+      <input type="text" id="title" name="title"><br><br>
+    <label for="description">description:</label>
+      <input type="text" id="description" name="description"><br><br>
+	<label for="subject">subject:</label>
+      <input type="text" id="subject" name="subject"><br><br>
+      <label for="username">email:</label>
+      <input type="text" id="username" name="username"><br><br>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+      const form = document.querySelector('#donation-form');
+      form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
+          const url = 'https://tc7vs3yb2surb2h25hefxe7erq0bstyi.lambda-url.us-west-1.on.aws/post-donation';
+          const options = {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          };
+
+          try{
+          const response = await fetch(url, options);
+          const result = await response.json();
+          console.log(result);
+
+
+          if (result.status == "error") {
+              message.textContent = 'Error submitting donation';
+          } else {
+              message.textContent = 'Donation successfully submitted';
+          }
+        }    catch (error){
+            console.error('Error submitting donation', error)
+          }
+
+      });
+    </script>
+</body>
+</html>
